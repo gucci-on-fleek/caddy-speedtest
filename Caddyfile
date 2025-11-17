@@ -1,0 +1,8 @@
+# Caddy Speedtest
+# https://github.com/gucci-on-fleek/caddy-speedtest
+# SPDX-License-Identifier: Apache-2.0+
+# SPDX-FileCopyrightText: 2025 Max Chernoff
+
+localhost {
+	speedtest
+}
