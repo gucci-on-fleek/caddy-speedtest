@@ -21,7 +21,9 @@ import (
 func init() {
 	caddy.RegisterModule(Speedtest{})
 	httpcaddyfile.RegisterHandlerDirective("speedtest", parseCaddyfile)
-	httpcaddyfile.RegisterDirectiveOrder("speedtest", httpcaddyfile.Before, "file_server")
+	httpcaddyfile.RegisterDirectiveOrder(
+		"speedtest", httpcaddyfile.Before, "file_server",
+	)
 }
 
 // Speedtest implements an HTTP handler that performs speed tests.
@@ -46,7 +48,7 @@ func (m *Speedtest) Validate() error {
 }
 
 // ServeHTTP implements caddyhttp.MiddlewareHandler.
-func (m Speedtest) ServeHTTP(w http.ResponseWriter, r *http.Request, next caddyhttp.Handler) error {
+func (m Speedtest) ServeHTTP(w http.ResponseWriter, r *http.Request, _ caddyhttp.Handler) error {
 	switch r.Method {
 	case http.MethodGet:
 		return m.handleGet(w, r)
@@ -62,6 +64,8 @@ type randReadSeeker struct {
 	rng  *rand.ChaCha8
 	size int64
 }
+
+var _ io.ReadSeeker = (*randReadSeeker)(nil)
 
 func newRandReadSeeker(size int64) *randReadSeeker {
 	rng := rand.NewChaCha8([32]byte{})
@@ -93,7 +97,10 @@ func (r *randReadSeeker) Read(p []byte) (n int, err error) {
 func (m Speedtest) handleGet(w http.ResponseWriter, r *http.Request) error {
 	bytes, err := humanize.ParseBytes(r.URL.Query().Get("bytes"))
 	if err != nil || bytes == 0 {
-		return caddyhttp.Error(http.StatusBadRequest, fmt.Errorf("invalid or missing 'bytes' query parameter"))
+		return caddyhttp.Error(
+			http.StatusBadRequest,
+			fmt.Errorf("invalid or missing 'bytes' query parameter"),
+		)
 	}
 
 	rng := newRandReadSeeker(int64(bytes))
@@ -105,18 +112,27 @@ func (m Speedtest) handleGet(w http.ResponseWriter, r *http.Request) error {
 
 // handlePost handles POST requests for the speedtest.
 func (m Speedtest) handlePost(w http.ResponseWriter, r *http.Request) error {
-	return caddyhttp.Error(http.StatusNotImplemented, fmt.Errorf("POST speedtest not implemented"))
+	w.WriteHeader(http.StatusContinue)
+
+	size, err := io.Copy(io.Discard, r.Body)
+	if err != nil {
+		return caddyhttp.Error(
+			http.StatusInternalServerError,
+			fmt.Errorf("failed to read request body: %v", err),
+		)
+	}
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	fmt.Fprintln(w, "Received", humanize.Bytes(uint64(size)), "bytes.")
+	return nil
 }
 
 // UnmarshalCaddyfile implements caddyfile.Unmarshaler.
 func (m *Speedtest) UnmarshalCaddyfile(d *caddyfile.Dispenser) error {
-	for d.Next() {
-		for d.NextBlock(0) {
-			switch d.Val() {
-			default:
-				return fmt.Errorf("unknown subdirective: %q", d.Val())
-			}
-		}
+	if !d.Next() { // "speedtest"
+		return fmt.Errorf(`"speedtest" directive is missing`) // Impossible
+	}
+	if d.Next() { // Any arguments?
+		return fmt.Errorf(`"speedtest" takes no arguments`)
 	}
 	return nil
 }
