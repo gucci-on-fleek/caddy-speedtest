@@ -2,7 +2,27 @@
 # https://github.com/gucci-on-fleek/caddy-speedtest
 # SPDX-License-Identifier: Apache-2.0+
 # SPDX-FileCopyrightText: 2025 Max Chernoff
+{
+	log {
+		output stderr
+		format console
+		level DEBUG
+	}
+}
 
 localhost {
-	speedtest
+	@speedtest path /speedtest
+
+	speedtest @speedtest
+
+	log {
+		output stderr
+		format console
+		level DEBUG
+	}
+
+	handle_errors {
+		header Content-Type "text/plain; charset=utf-8"
+		respond `{err.status_code} {err.status_text}: {err.message}`
+	}
 }
