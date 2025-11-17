@@ -1,8 +1,8 @@
 // Caddy Speedtest
-// https://github.com/gucci-on-fleek/caddy-speedtest
+// https://maxchernoff.ca/tools/speedtest
 // SPDX-License-Identifier: Apache-2.0+
 // SPDX-FileCopyrightText: 2025 Max Chernoff
-module github.com/gucci-on-fleek/caddy-speedtest
+module maxchernoff.ca/tools/speedtest
 
 go 1.25.4
 

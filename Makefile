@@ -1,5 +1,5 @@
 # Caddy Speedtest
-# https://github.com/gucci-on-fleek/caddy-speedtest
+# https://maxchernoff.ca/tools/speedtest
 # SPDX-License-Identifier: Apache-2.0+
 # SPDX-FileCopyrightText: 2025 Max Chernoff
 
@@ -30,7 +30,7 @@ default:
 build: caddy
 
 caddy: go.mod speedtest.go
-	xcaddy build --with github.com/gucci-on-fleek/caddy-speedtest=.
+	xcaddy build --with maxchernoff.ca/tools/speedtest=.
 
 # Run the Caddy server with the speedtest module
 .PHONY: run

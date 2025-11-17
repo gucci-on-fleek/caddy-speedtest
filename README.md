@@ -1,14 +1,15 @@
 <!-- Caddy Speedtest
-     https://github.com/gucci-on-fleek/caddy-speedtest
-     SPDX-License-Identifier: Apache-2.0+
+     https://maxchernoff.ca/tools/speedtest
+     SPDX-License-Identifier: Apache-2.0+ OR CC-BY-SA-4.0+
      SPDX-FileCopyrightText: 2025 Max Chernoff
 -->
 
 Caddy Speedtest
 ===============
 
-This is a Caddy module that provides a basic HTTP speed test service,
-intended to be used via command-line programs like `curl` or `wget`.
+This is a Caddy module that provides a basic <abbr>HTTP</abbr> speed
+test service, intended to be used via command-line programs like `curl`
+or `wget`.
 
 
 Installation
@@ -17,19 +18,19 @@ Installation
 - Using [`xcaddy`](https://github.com/caddyserver/xcaddy):
 
   ```console
-  $ xcaddy build --with github.com/gucci-on-fleek/caddy-speedtest
+  $ xcaddy build --with maxchernoff.ca/tools/speedtest
   ```
 
 - Using `caddy add-package` ([not
   recommended](https://github.com/caddyserver/caddy/issues/7010)):
 
   ```console
-  $ caddy add-package github.com/gucci-on-fleek/caddy-speedtest
+  $ caddy add-package maxchernoff.ca/tools/speedtest
   ```
 
 - Manually, by visiting
   [`caddyserver.com/download`](https://caddyserver.com/download) and
-  selecting `github.com/gucci-on-fleek/caddy-speedtest` from the list of
+  selecting `maxchernoff.ca/tools/speedtest` from the list of
   plugins.
 
 
@@ -66,6 +67,18 @@ $ head --bytes=100M /dev/urandom | curl --output /dev/null --progress-meter --fo
 100  100M  100    23  100  100M    149   651M --:--:-- --:--:-- --:--:--  649M
 ```
 
+### Hosted Service
+
+A public instance of this service is hosted on my personal server. The
+server is fairly slow, so **under no circumstances** should you use it
+in any scripts or include its <abbr>URL</abbr> in any lists of speed
+test services. However, feel free to use it for manually by typing a
+`curl`/`wget` command into your terminal.
+
+As long as you follow the usage instructions above, you can access it at
+[`maxchernoff.ca/tools/speedtest`](https://maxchernoff.ca/tools/speedtest).
+
+
 Why does this exist?
 --------------------
 
@@ -80,6 +93,12 @@ of them meet _all_ the following criteria:
 
 Since I'm already using Caddy for other purposes, the easiest solution
 was to write a Caddy module that provides this functionality.
+
+Source Code
+-----------
+
+The source code for this module is hosted on GitHub at
+[`github.com/gucci-on-fleek/caddy-speedtest`](https://github.com/gucci-on-fleek/caddy-speedtest).
 
 Licence
 -------
