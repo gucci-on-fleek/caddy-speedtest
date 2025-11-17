@@ -6,20 +6,20 @@
 	log {
 		output stderr
 		format console
-		level DEBUG
+		level INFO
 	}
 }
 
 localhost {
-	@speedtest path /speedtest
-
-	speedtest @speedtest
-
 	log {
 		output stderr
 		format console
-		level DEBUG
+		level INFO
 	}
+
+	@speedtest path /speedtest
+
+	speedtest @speedtest
 
 	handle_errors {
 		header Content-Type "text/plain; charset=utf-8"
