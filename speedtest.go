@@ -189,9 +189,16 @@ func (m Speedtest) handlePost(w http.ResponseWriter, r *http.Request) error {
 		)
 	}
 
+	if size == 0 {
+		return caddyhttp.Error(
+			http.StatusBadRequest,
+			fmt.Errorf("request body is empty"),
+		)
+	}
+
 	// Respond with the number of bytes received
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	fmt.Fprintln(w, "Received", humanize.Bytes(uint64(size)), "bytes.")
+	fmt.Fprintln(w, "Received", humanize.Bytes(uint64(size)), ".")
 
 	return nil
 }
