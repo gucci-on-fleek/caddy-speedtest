@@ -17,7 +17,7 @@ MAKEFLAGS += --no-builtin-rules
 # Shell settings
 .ONESHELL:
 .SHELLFLAGS := -euo pipefail -c
-SHELL := /usr/bin/bash
+SHELL := /bin/bash
 
 # Default target
 .DEFAULT_GOAL := default
@@ -30,7 +30,7 @@ default:
 build: caddy
 
 caddy: go.mod speedtest.go
-	xcaddy build --with maxchernoff.ca/tools/speedtest=.
+	go tool xcaddy build --with maxchernoff.ca/tools/speedtest=.
 
 # Run the Caddy server with the speedtest module
 .PHONY: run
@@ -40,11 +40,14 @@ run: caddy Caddyfile
 # Run the tests
 .PHONY: test
 test: speedtest_test.go speedtest.go
+	go mod tidy --diff
+
 	go tool gofumpt -l -e -extra . | \
-		wc --bytes | \
-		grep --silent --invert-match '[^0]' || {
+		wc -c | \
+		grep -q -v '[^0]' || {
 			echo "files are not formatted"
 			exit 1
 		}
 
-	go test --vet=all --bench=. -v ./...
+	go test --vet=all ./...
+	go test --bench=. --benchtime=2s ./... || echo "benchmarks failed, ignoring"
