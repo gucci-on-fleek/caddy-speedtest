@@ -198,7 +198,7 @@ func (m Speedtest) handlePost(w http.ResponseWriter, r *http.Request) error {
 
 	// Respond with the number of bytes received
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	fmt.Fprintln(w, "Received", humanize.Bytes(uint64(size)), ".")
+	fmt.Fprintf(w, "Received %s.\n", humanize.Bytes(uint64(size)))
 
 	return nil
 }

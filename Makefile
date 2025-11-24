@@ -16,7 +16,7 @@ MAKEFLAGS += --no-builtin-rules
 
 # Shell settings
 .ONESHELL:
-.SHELLFLAGS := -eu -o pipefail -c
+.SHELLFLAGS := -euo pipefail -c
 SHELL := /usr/bin/bash
 
 # Default target
@@ -36,3 +36,15 @@ caddy: go.mod speedtest.go
 .PHONY: run
 run: caddy Caddyfile
 	./caddy run --config Caddyfile
+
+# Run the tests
+.PHONY: test
+test: speedtest_test.go speedtest.go
+	go tool gofumpt -l -e -extra . | \
+		wc --bytes | \
+		grep --silent --invert-match '[^0]' || {
+			echo "files are not formatted"
+			exit 1
+		}
+
+	go test --vet=all --bench=. -v ./...

@@ -6,15 +6,15 @@
 	log {
 		output stderr
 		format console
-		level INFO
+		level DEBUG
 	}
 }
 
-localhost {
+https://localhost, http://localhost {
 	log {
 		output stderr
 		format console
-		level INFO
+		level DEBUG
 	}
 
 	@speedtest path /speedtest

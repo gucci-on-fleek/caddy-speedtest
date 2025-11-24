@@ -89,7 +89,7 @@ of them meet _all_ the following criteria:
 
 - Must support uploading files of arbitrary size.
 
-- Must have a well-defined geographical location (no anycast).
+- Must have a fixed geographical location (no anycast).
 
 Since I'm already using Caddy for other purposes, the easiest solution
 was to write a Caddy module that provides this functionality.
